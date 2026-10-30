@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BTC Liquidity Radar</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#070812;color:#e9ecff;font-family:Inter,Arial,sans-serif}
+a{text-decoration:none;color:inherit}.wrap{max-width:1500px;margin:auto;padding:22px}
+header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 18px;border:1px solid #252943;background:#0d0f1c;border-radius:18px;position:sticky;top:10px;z-index:5;backdrop-filter:blur(12px)}
+.brand{font-weight:900;letter-spacing:.08em}.sub{font-size:11px;color:#7f86a8;margin-top:4px}
+.nav{display:flex;gap:18px;color:#969dbd;font-size:13px}.nav b{color:#fff}
+.actions{display:flex;align-items:center;gap:9px}.pill,.btn{border:1px solid #2c3150;background:#111426;color:#dce2ff;border-radius:10px;padding:9px 12px;font-size:12px}.live{color:#56f0a4}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:14px}.card{grid-column:span 4;background:linear-gradient(145deg,#101321,#0b0d18);border:1px solid #242942;border-radius:16px;padding:17px;box-shadow:0 10px 30px #0005}.wide{grid-column:span 8}.full{grid-column:span 12}.title{font-size:12px;color:#8e96b8;text-transform:uppercase;letter-spacing:.09em}.value{font-size:30px;font-weight:800;margin:9px 0}.green{color:#51ed9f}.red{color:#ff637c}.violet{color:#b993ff}.muted{color:#737b9d}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.metric{padding:12px;background:#0b0e19;border:1px solid #20253b;border-radius:12px}.metric strong{display:block;font-size:18px;margin-top:5px}
+.chart{height:300px;margin-top:12px;position:relative;overflow:hidden;border-radius:12px;background:repeating-linear-gradient(0deg,#ffffff04 0,#ffffff04 1px,transparent 1px,transparent 50px),repeating-linear-gradient(90deg,#ffffff03 0,#ffffff03 1px,transparent 1px,transparent 80px)}
+.line{position:absolute;inset:0;background:linear-gradient(155deg,transparent 0 15%,#7f5cff22 16% 18%,transparent 19% 29%,#45efaa30 30% 32%,transparent 33% 48%,#9b7bff30 49% 51%,transparent 52% 63%,#4ceaa855 64% 66%,transparent 67%);clip-path:polygon(0 65%,8% 59%,16% 70%,25% 43%,34% 48%,42% 30%,51% 39%,60% 25%,68% 34%,77% 20%,86% 27%,94% 11%,100% 17%,100% 100%,0 100%)}
+.heat{height:330px;border-radius:12px;position:relative;overflow:hidden;background:linear-gradient(180deg,#ff385522,#ff385510 22%,#101424 45%,#19e99b12 72%,#19e99b25),repeating-linear-gradient(0deg,#ffffff07 0,#ffffff07 1px,transparent 1px,transparent 22px)}
+.wall{position:absolute;height:16px;border-radius:8px;left:10%;right:10%;filter:blur(.2px);box-shadow:0 0 20px currentColor}.ask{color:#ff4d6d;background:#ff4d6d66}.bid{color:#38f2a0;background:#38f2a066}.price{position:absolute;left:0;right:0;height:2px;background:#fff;box-shadow:0 0 12px #fff;top:51%}
+.book{display:grid;grid-template-columns:1fr 1fr;gap:12px}.book table{width:100%;border-collapse:collapse;font-size:12px}.book td{padding:6px;border-bottom:1px solid #171b2b}.right{text-align:right}
+.bar{height:9px;background:#1a1e31;border-radius:10px;overflow:hidden;margin:8px 0 12px}.bar i{display:block;height:100%;border-radius:10px}.bgreen{background:#43e89a}.bred{background:#ff536f}
+.gauge{width:180px;height:180px;border-radius:50%;margin:12px auto;background:conic-gradient(#b78cff 0 72%,#20243a 72%);display:grid;place-items:center}.gauge:after{content:"";width:132px;height:132px;border-radius:50%;background:#0c0f1b;position:absolute}.gnum{position:relative;z-index:1;text-align:center;font-size:34px;font-weight:900}.gnum small{display:block;font-size:10px;color:#8991b1}
+.tags{display:flex;gap:7px;flex-wrap:wrap}.tag{padding:6px 9px;border-radius:999px;background:#171b2c;border:1px solid #292f4c;font-size:11px}
+@media(max-width:900px){.card,.wide,.full{grid-column:span 12}.nav{display:none}.metrics{grid-template-columns:repeat(2,1fr)}header{position:static}.book{grid-template-columns:1fr}.wrap{padding:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><div class="brand">◉ LIQUIDITY RADAR</div><div class="sub">BTC/USDT MARKET MICROSTRUCTURE</div></div>
+  <nav class="nav"><b>Dashboard</b><span>Order Flow</span><span>Liquidity</span><span>Signals</span><span>Alerts</span></nav>
+  <div class="actions"><span class="pill">BTCUSDT ▾</span><span class="pill">BINANCE FUTURES</span><span class="pill live">● CONNECTED</span><button class="btn" onclick="resync()">↻ RESYNC</button></div>
+</header>
+
+<div class="grid">
+<section class="card full">
+ <div class="row"><div><div class="title">BTC Command Center</div><div class="value">$108,742.60 <span class="green" style="font-size:15px">+1.84%</span></div></div><div class="tags"><span class="tag">1m</span><span class="tag">5m</span><span class="tag">15m</span><span class="tag">1H</span><span class="tag">4H</span><span class="tag">1D</span></div></div>
+ <div class="metrics"><div class="metric">24H HIGH<strong>$110,420</strong></div><div class="metric">24H LOW<strong>$105,890</strong></div><div class="metric">24H VOLUME<strong>$42.8B</strong></div><div class="metric">SPREAD<strong>0.01%</strong></div></div>
+ <div class="chart"><div class="line"></div></div>
+</section>
+
+<section class="card"><div class="title">Market Bias</div><div class="value green">BULLISH</div><div class="row"><span class="muted">Score</span><strong>72 / 100</strong></div><div class="bar"><i class="bgreen" style="width:72%"></i></div><div class="row"><span class="muted">Confidence</span><strong>81%</strong></div><div class="tags" style="margin-top:12px"><span class="tag">OBI +</span><span class="tag">CVD +</span><span class="tag">Momentum +</span></div></section>
+
+<section class="card"><div class="title">Market Strength</div><div class="gauge"><div class="gnum">78<small>STRONG</small></div></div></section>
+
+<section class="card"><div class="title">Market Regime</div><div class="value violet">EXPANSION</div><p class="muted">Liquidity is thinning above price while aggressive buy flow is increasing.</p><div class="tags"><span class="tag">Trend ↑</span><span class="tag">Volume ↑</span><span class="tag">Liquidity: Medium</span></div></section>
+
+<section class="card wide"><div class="row"><div class="title">Liquidity Heatmap</div><span class="tag">LIVE DEPTH</span></div><div class="heat"><div class="wall ask" style="top:18%"></div><div class="wall ask" style="top:31%;left:28%;right:17%"></div><div class="wall bid" style="top:65%;left:18%;right:25%"></div><div class="wall bid" style="top:78%;left:8%;right:35%"></div><div class="price"></div></div></section>
+
+<section class="card"><div class="title">Order Flow Pressure</div><div class="value">$18.4M</div><div class="row"><span class="green">BUY 61%</span><span class="red">SELL 39%</span></div><div class="bar"><i class="bgreen" style="width:61%"></i></div><div class="row"><span class="muted">Delta</span><strong class="green">+$4.05M</strong></div><div class="row"><span class="muted">OBI</span><strong>+0.34</strong></div></section>
+
+<section class="card"><div class="title">Liquidity Magnets</div><div style="margin-top:15px"><div class="row"><b>$109,180</b><span class="red">$24.2M ASK</span></div><p class="muted">0.40% away</p><div class="row"><b>$108,120</b><span class="green">$18.7M BID</span></div><p class="muted">0.57% away</p><div class="row"><b>$109,620</b><span class="red">$12.9M ASK</span></div><p class="muted">0.81% away</p></div></section>
+
+<section class="card"><div class="title">Potential Spoof Watch</div><div class="value violet">34 <span style="font-size:12px">/ 100</span></div><div class="row"><span class="muted">Status</span><span class="tag">SUSPICIOUS</span></div><p class="muted">Flags rapid cancellation/reappearance patterns. Not proof of manipulation.</p></section>
+
+<section class="card"><div class="title">Absorption Radar</div><div class="value">68</div><div class="row"><span class="green">BUY ABSORPTION</span><span>$3.8M</span></div><p class="muted">High aggressive volume with limited downward price response.</p></section>
+
+<section class="card"><div class="title">Delta Divergence</div><div class="value green">BULLISH</div><div class="row"><span class="muted">Price</span><span>Higher Low</span></div><div class="row"><span class="muted">CVD</span><span>Higher Low</span></div><div class="bar"><i class="bgreen" style="width:76%"></i></div></section>
+
+<section class="card wide"><div class="title">Order Book Imbalance Ladder</div><div class="book"><table><tr><td class="red">$109,010</td><td class="right">2.41 BTC</td></tr><tr><td class="red">$108,950</td><td class="right">4.18 BTC</td></tr><tr><td class="red">$108,880</td><td class="right">7.63 BTC</td></tr><tr><td class="red">$108,820</td><td class="right">3.14 BTC</td></tr></table><table><tr><td class="green">$108,740</td><td class="right">5.81 BTC</td></tr><tr><td class="green">$108,680</td><td class="right">8.44 BTC</td></tr><tr><td class="green">$108,620</td><td class="right">3.27 BTC</td></tr><tr><td class="green">$108,560</td><td class="right">6.92 BTC</td></tr></table></div></section>
+
+<section class="card"><div class="title">Large Order Tape</div><div class="row" style="margin:12px 0"><span class="green">BUY</span><b>$1.24M</b><span class="muted">0.4s</span></div><div class="row" style="margin:12px 0"><span class="red">SELL</span><b>$742K</b><span class="muted">0.8s</span></div><div class="row" style="margin:12px 0"><span class="green">BUY</span><b>$2.08M</b><span class="muted">1.2s</span></div></section>
+
+<section class="card"><div class="title">Funding + OI</div><div class="row"><span>Funding</span><strong class="green">+0.0081%</strong></div><div class="row"><span>Open Interest</span><strong>$18.7B</strong></div><div class="row"><span>OI Change</span><strong class="green">+2.4%</strong></div><div class="bar"><i class="bgreen" style="width:64%"></i></div></section>
+
+<section class="card"><div class="title">Liquidation Radar</div><div class="row"><span class="red">SHORTS</span><strong>$21.4M</strong></div><div class="bar"><i class="bred" style="width:72%"></i></div><div class="row"><span class="green">LONGS</span><strong>$8.2M</strong></div><div class="bar"><i class="bgreen" style="width:28%"></i></div></section>
+
+<section class="card"><div class="title">BTC Dominance</div><div class="value">57.8%</div><div class="green">+0.42% today</div><p class="muted">Macro context for BTC positioning; no other asset dashboards.</p></section>
+
+<section class="card full"><div class="title">Signal Timeline</div><div class="tags" style="margin-top:14px"><span class="tag">01:14:22 — Bid liquidity increased</span><span class="tag">01:14:39 — Buy absorption detected</span><span class="tag">01:15:03 — CVD divergence confirmed</span><span class="tag">01:15:21 — Bias changed to bullish</span><span class="tag">01:15:47 — Ask wall detected</span></div></section>
+</div>
+</div>
+<script>
+function resync(){
+ const b=document.querySelector('.actions .btn'); const old=b.textContent;
+ b.textContent='⟳ SYNCING...'; b.disabled=true;
+ setTimeout(()=>{b.textContent='✓ SYNCED'; setTimeout(()=>{b.textContent=old;b.disabled=false},1200)},1200);
+}
+</script>
+</body>
+</html>
